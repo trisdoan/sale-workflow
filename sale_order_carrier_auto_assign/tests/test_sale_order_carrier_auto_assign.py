@@ -42,3 +42,10 @@ class TestSaleOrderCarrierAutoAssign(TransactionCase):
         self.sale_order.action_confirm()
         self.assertEqual(self.sale_order.state, "sale")
         self.assertFalse(self.sale_order.carrier_id)
+
+    def test_action_confirm_multi_sales(self):
+        sale_order_2 = self.sale_order.copy()
+        two_sales = self.sale_order | sale_order_2
+        two_sales.action_confirm()
+        self.assertEqual(self.sale_order.state, "sale")
+        self.assertEqual(sale_order_2.state, "sale")
