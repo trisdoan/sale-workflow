@@ -40,6 +40,13 @@ This module assigns automatically delivery carrier on sale order confirmation.
 .. contents::
    :local:
 
+Configuration
+=============
+
+To enable sale order carrier auto assign:
+
+#. Go to *Settings > Sales > Carrier Auto Assign*.
+
 Bug Tracker
 ===========
 
@@ -64,6 +71,8 @@ Contributors
 * Akim Juillerat <akim.juillerat@camptocamp.com>
 * Son (Ho Dac) <hodacson.6491@gmail.com>
 * Phuc (Tran Thanh) <phuc@trobz.com>
+* Telmo Santos <telmo.santos@camptocamp.com>
+* Tris Doan <tridm@trobz.com>
 
 Maintainers
 ~~~~~~~~~~~
