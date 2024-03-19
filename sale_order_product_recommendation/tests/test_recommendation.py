@@ -6,11 +6,13 @@
 from freezegun import freeze_time
 
 from odoo.exceptions import UserError
+from odoo.tests import tagged
 from odoo.tests.common import Form
 
 from .test_recommendation_common import RecommendationCase
 
 
+@tagged("post_install", "-at_install")
 @freeze_time("2021-10-02 15:30:00")
 class RecommendationCaseTests(RecommendationCase):
     def test_recommendations(self):
@@ -154,6 +156,7 @@ class RecommendationCaseTests(RecommendationCase):
                 }
             ],
         )
+
         # Use a new wizard to change product 2 to 10 units
         wizard = self.wizard()
         with Form(wizard) as wizard_f:
