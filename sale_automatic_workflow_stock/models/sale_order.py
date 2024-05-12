@@ -3,7 +3,7 @@
 # Copyright 2016 Sodexis
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, models
+from odoo import api, models, fields
 
 
 class SaleOrder(models.Model):
@@ -14,5 +14,6 @@ class SaleOrder(models.Model):
     @api.depends("partner_id", "user_id", "workflow_process_id")
     def _compute_team_id(self):  # pylint: disable=W8110
         super()._compute_team_id()
-        if self.workflow_process_id.picking_policy:
-            self.picking_policy = self.workflow_process_id.picking_policy
+        for order in self:
+            if order.workflow_process_id.picking_policy:
+                order.picking_policy = order.workflow_process_id.picking_policy

@@ -29,8 +29,8 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowStockMixin):
         self.run_job()
         self.assertEqual(picking.state, "done")
 
-    def test_02_onchange_workflow_process(self):
-        workflow = self.create_full_automatic()
+    def test_02_compute_picking_policy(self):
+        workflow = self.create_full_automatic(override={"picking_policy": "one"})
         sale = self.create_sale_order(workflow)
         self.assertEqual(sale.picking_policy, "one")
         workflow2 = self.create_full_automatic(override={"picking_policy": "direct"})

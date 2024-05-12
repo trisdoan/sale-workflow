@@ -62,8 +62,9 @@ class SaleOrder(models.Model):
     @api.depends("partner_id", "user_id", "workflow_process_id")
     def _compute_team_id(self):  # pylint: disable=W8110
         super()._compute_team_id()
-        if self.workflow_process_id.team_id:
-            self.team_id = self.workflow_process_id.team_id.id
+        for order in self:
+            if order.workflow_process_id.team_id:
+                order.team_id = order.workflow_process_id.team_id.id
 
     def _create_invoices(self, grouped=False, final=False, date=None):
         for order in self:
