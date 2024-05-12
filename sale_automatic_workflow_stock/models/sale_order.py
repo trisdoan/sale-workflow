@@ -11,11 +11,8 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
-    # pylint: disable=W8110
-    @api.onchange("workflow_process_id")
-    def _onchange_workflow_process_id(self):
-        # Override to add stock related workflow
-        super()._onchange_workflow_process_id()
-        workflow = self.workflow_process_id
-        if workflow.picking_policy:
-            self.picking_policy = workflow.picking_policy
+    @api.depends("partner_id", "user_id", "workflow_process_id")
+    def _compute_team_id(self):  # pylint: disable=W8110
+        super()._compute_team_id()
+        if self.workflow_process_id.picking_policy:
+            self.picking_policy = self.workflow_process_id.picking_policy

@@ -191,5 +191,4 @@ class TestMultiCompanyCommon(AccountTestInvoicingCommon):
                 ],
             }
         )
-        order._onchange_workflow_process_id()
         return order

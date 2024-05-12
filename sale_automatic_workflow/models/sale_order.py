@@ -52,14 +52,18 @@ class SaleOrder(models.Model):
 
     @api.onchange("workflow_process_id")
     def _onchange_workflow_process_id(self):
-        if not self.workflow_process_id:
-            return
-        workflow = self.workflow_process_id
-        if workflow.team_id:
-            self.team_id = workflow.team_id.id
-        if workflow.warning:
-            warning = {"title": _("Workflow Warning"), "message": workflow.warning}
+        if self.workflow_process_id.warning:
+            warning = {
+                "title": _("Workflow Warning"),
+                "message": self.workflow_process_id.warning,
+            }
             return {"warning": warning}
+
+    @api.depends("partner_id", "user_id", "workflow_process_id")
+    def _compute_team_id(self):  # pylint: disable=W8110
+        super()._compute_team_id()
+        if self.workflow_process_id.team_id:
+            self.team_id = self.workflow_process_id.team_id.id
 
     def _create_invoices(self, grouped=False, final=False, date=None):
         for order in self:

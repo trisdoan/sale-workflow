@@ -28,7 +28,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowMixin):
     def test_01_full_automatic(self):
         workflow = self.create_full_automatic()
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         self.assertEqual(sale.state, "draft")
         self.assertEqual(sale.workflow_process_id, workflow)
         self.run_job()
@@ -42,11 +41,9 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowMixin):
         team_2 = self.env.ref("sales_team.team_sales_department")
         workflow = self.create_full_automatic(override={"team_id": team_1.id})
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         self.assertEqual(sale.team_id, team_1)
         workflow2 = self.create_full_automatic(override={"team_id": team_2.id})
         sale.workflow_process_id = workflow2.id
-        sale._onchange_workflow_process_id()
         self.assertEqual(sale.team_id, team_2)
 
     def test_03_date_invoice_from_sale_order(self):
@@ -56,7 +53,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowMixin):
         last_week_time = fields.Datetime.now() - timedelta(days=7)
         override = {"date_order": last_week_time}
         sale = self.create_sale_order(workflow, override=override)
-        sale._onchange_workflow_process_id()
         self.assertEqual(sale.date_order, last_week_time)
         self.run_job()
         self.assertTrue(sale.invoice_ids)
@@ -67,7 +63,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowMixin):
     def test_04_create_invoice_from_sale_order(self):
         workflow = self.create_full_automatic()
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         line = sale.order_line[0]
         # Make sure this addon works properly in regards to it.
         mock_path = "odoo.addons.sale.models.sale_order.SaleOrder._create_invoices"
@@ -110,7 +105,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowMixin):
             ]
         }
         sale = self.create_sale_order(workflow, override=override)
-        sale._onchange_workflow_process_id()
         self.run_job()
         self.assertTrue(sale.invoice_ids)
         invoice = sale.invoice_ids
@@ -126,7 +120,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowMixin):
 
         workflow = self.create_full_automatic()
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         self.run_job()
         self.assertTrue(sale.invoice_ids)
         invoice = sale.invoice_ids
@@ -136,7 +129,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowMixin):
             override={"property_journal_id": new_sale_journal.id}
         )
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         self.run_job()
         self.assertTrue(sale.invoice_ids)
         invoice = sale.invoice_ids
@@ -146,7 +138,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowMixin):
         workflow = self.create_full_automatic()
         workflow.send_order_confirmation_mail = True
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         previous_message_ids = sale.message_ids
         self.run_job()
         self.assertEqual(sale.state, "sale")

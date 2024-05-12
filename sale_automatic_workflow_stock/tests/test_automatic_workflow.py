@@ -17,7 +17,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowStockMixin):
     def test_01_full_automatic(self):
         workflow = self.create_full_automatic()
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         self.assertEqual(sale.state, "draft")
         self.assertEqual(sale.workflow_process_id, workflow)
         self.run_job()
@@ -33,17 +32,14 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowStockMixin):
     def test_02_onchange_workflow_process(self):
         workflow = self.create_full_automatic()
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         self.assertEqual(sale.picking_policy, "one")
         workflow2 = self.create_full_automatic(override={"picking_policy": "direct"})
         sale.workflow_process_id = workflow2.id
-        sale._onchange_workflow_process_id()
         self.assertEqual(sale.picking_policy, "direct")
 
     def test_03_create_invoice_from_sale_order(self):
         workflow = self.create_full_automatic()
         sale = self.create_sale_order(workflow)
-        sale._onchange_workflow_process_id()
         line = sale.order_line[0]
         self.assertFalse(workflow.invoice_service_delivery)
         self.assertEqual(line.qty_delivered_method, "stock_move")
@@ -103,7 +99,6 @@ class TestAutomaticWorkflow(TestCommon, TestAutomaticWorkflowStockMixin):
             ]
         }
         sale = self.create_sale_order(workflow, override=override)
-        sale._onchange_workflow_process_id()
         self.run_job()
         self.assertFalse(sale.picking_ids)
         self.assertTrue(sale.invoice_ids)

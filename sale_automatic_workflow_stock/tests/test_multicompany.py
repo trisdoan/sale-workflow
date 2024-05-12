@@ -47,7 +47,6 @@ class TestMultiCompany(TestMultiCompanyCommon):
                 ],
             }
         )
-        order._onchange_workflow_process_id()
         return order
 
     def test_sale_order_multicompany(self):
