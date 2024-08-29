@@ -109,23 +109,22 @@ class SaleOrder(models.Model):
                             line.price_subtotal, discounts.copy()
                         )
                     amount_discounted_untaxed += discounted_subtotal
-                    discounted_tax = line.tax_id.compute_all(
-                        discounted_subtotal,
-                        line.order_id.currency_id,
-                        1.0,
-                        product=line.product_id,
-                        partner=line.order_id.partner_shipping_id,
-                        # By default, handle_price_include=True
-                        # Marking it False means using discounted amount as base amount
-                        handle_price_include=False,
+
+                    # tax calculation
+                    tax_results = (
+                        self.env["account.tax"]
+                        .with_company(line.company_id)
+                        ._compute_taxes(
+                            [
+                                line.with_context(
+                                    from_tax_calculation=True
+                                )._convert_to_tax_base_line_dict()
+                            ]
+                        )
                     )
-                    for tax in discounted_tax.get("taxes", []):
-                        if line.tax_id.browse(tax["id"]).amount_type == "fixed":
-                            amount_discounted_tax += (
-                                tax.get("amount", 0.0) * line.product_uom_qty
-                            )
-                            continue
-                        amount_discounted_tax += tax.get("amount", 0.0)
+                    totals = list(tax_results["totals"].values())[0]
+                    amount_discounted_tax += totals["amount_tax"]
+
                 vals.update(
                     {
                         "amount_global_discount": (
