@@ -3,7 +3,7 @@
 {
     "name": "Sell Only By Packaging",
     "summary": "Manage sale of packaging",
-    "version": "16.0.1.1.0",
+    "version": "18.0.1.0.0",
     "development_status": "Alpha",
     "category": "Warehouse Management",
     "website": "https://github.com/OCA/sale-workflow",
@@ -11,7 +11,7 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": ["product_packaging_level_salable", "sale_stock"],
+    "depends": ["product_packaging_level_salable"],
     "data": [
         "views/product_packaging.xml",
         "views/product_template.xml",
