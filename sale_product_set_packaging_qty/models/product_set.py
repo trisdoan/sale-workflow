@@ -1,6 +1,6 @@
 # Copyright 2020 Camptocamp SA
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl)
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import float_is_zero
 
@@ -26,12 +26,8 @@ class ProductSetLine(models.Model):
     def _compute_product_packaging_qty(self):
         for line in self:
             uom_rounding = line.product_id.uom_id.rounding
-            if (
-                not line.product_packaging_id
-                or float_is_zero(line.quantity, precision_rounding=uom_rounding)
-                or float_is_zero(
-                    line.product_packaging_id.qty, precision_rounding=uom_rounding
-                )
+            if not line.product_packaging_id or float_is_zero(
+                line.quantity, precision_rounding=uom_rounding
             ):
                 line.product_packaging_qty = 0
                 continue
@@ -42,14 +38,10 @@ class ProductSetLine(models.Model):
         for line in self:
             if line.product_packaging_qty and not line.product_packaging_id:
                 raise UserError(
-                    _(
+                    self.env._(
                         "You must define a package before setting a quantity "
                         "of said package."
                     )
-                )
-            if line.product_packaging_id and line.product_packaging_id.qty == 0:
-                raise UserError(
-                    _("Please select a packaging with a quantity bigger than 0")
                 )
             if line.product_packaging_id and line.product_packaging_qty:
                 line.write(line._prepare_product_packaging_qty_values())
@@ -79,5 +71,5 @@ class ProductSetLine(models.Model):
             order, quantity, max_sequence=max_sequence
         )
         if self.product_packaging_id:
-            res["product_packaging"] = self.product_packaging_id.id
+            res["product_packaging_id"] = self.product_packaging_id.id
         return res

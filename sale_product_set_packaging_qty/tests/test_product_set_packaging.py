@@ -2,14 +2,14 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl)
 
 from odoo import exceptions
-from odoo.tests import common
+from odoo.tests.common import TransactionCase
 
 
-class TestProductSetPackaging(common.SavepointCase):
+class TestProductSetPackaging(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.line = cls.env.ref("sale_product_set.product_set_line_computer_3")
+        cls.line = cls.env.ref("product_set.product_set_line_computer_3")
         cls.packaging = cls.env["product.packaging"].create(
             {"name": "Box", "product_id": cls.line.product_id.id, "qty": 10}
         )
@@ -33,13 +33,6 @@ class TestProductSetPackaging(common.SavepointCase):
         with self.assertRaises(exceptions.UserError):
             line.product_packaging_qty = 10
 
-    def test_error_write_qty_but_packaging_zero(self):
-        line = self.line
-        line.product_packaging_id = self.packaging
-        self.packaging.qty = 0
-        with self.assertRaises(exceptions.UserError):
-            line.product_packaging_qty = 10
-
     def test_packaging_qty_update(self):
         line = self.line
         line.product_packaging_id = self.packaging
@@ -50,7 +43,8 @@ class TestProductSetPackaging(common.SavepointCase):
         # qty on line is 20: 2 packages of 10 units each
         self.assertEqual(line.quantity, 20)
 
-        # change qty on packaging and check product.set.line quantity is correctly updated
+        # change qty on packaging
+        # and check product.set.line quantity is correctly updated
         self.packaging.qty = 5
         self.line.product_packaging_qty = 2
 
