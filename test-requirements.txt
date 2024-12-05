@@ -1,0 +1,6 @@
+odoo-addon-product_packaging_level @ git+https://github.com/OCA/product-attribute.git@refs/pull/1806/head#subdirectory=product_packaging_level
+odoo-addon-product_packaging_level_salable @ git+https://github.com/OCA/product-attribute.git@refs/pull/1808/head#subdirectory=product_packaging_level_salable
+odoo-addon-product-set @ git+https://github.com/OCA/product-attribute.git@refs/pull/1758/head#subdirectory=product_set
+odoo-addon-sale_product_set @ git+https://github.com/OCA/sale-workflow.git@refs/pull/3386/head#subdirectory=sale_product_set
+odoo-addon-sale_product_set_packaging_qty @ git+https://github.com/OCA/sale-workflow.git@refs/pull/3474/head#subdirectory=sale_product_set_packaging_qty
+odoo-addon-sell_only_by_packaging @ git+https://github.com/OCA/sale-workflow.git@refs/pull/3475/head#subdirectory=sell_only_by_packaging
