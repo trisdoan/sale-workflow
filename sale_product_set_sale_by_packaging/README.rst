@@ -28,12 +28,11 @@ Sale Product Set Sale by packaging
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-Glue module between sale_by_packaging and
-sale_product_set_packaging_qty.
-
-If sell_only_by_packaging is ON and there are product set lines without
-packaging selected, a warning is displayed in the product form and quick
-link to all involved lines allows to review them.
+Glue module between sell_only_by_packaging and
+sale_product_set_packaging_qty. If sell_only_by_packaging is ON and
+there are product set lines without packaging selected, a warning is
+displayed in the product form and quick link to all involved lines
+allows to review them.
 
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
@@ -71,12 +70,13 @@ Contributors
 -  `Trobz <https://trobz.com>`__:
 
    -  Son Ho<sonhd@trobz.com>
+   -  Tris Doan<tridm@trobz.com>
 
 Other credits
 -------------
 
-The migration of this module from 13.0 to 14.0 was financially supported
-by Camptocamp
+The migration of this module from 13.0 to 14.0, and 14.0 to 18.0 was
+financially supported by Camptocamp
 
 Maintainers
 -----------
